@@ -55,13 +55,13 @@ pub fn execute(instr: []const u32) !void {
 
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
-    runAndRet(exec_mem_region.ptr, @returnAddress());
+    runAndRet(exec_mem_region.ptr);
 }
 
-fn runAndRet(location: *anyopaque, ra: u64) void {
+fn runAndRet(location: *anyopaque) void {
     asm volatile ("mov x30, %[ra]"
         :
-        : [ra] "r" (ra),
+        : [ra] "r" (@returnAddress()),
     );
     asm volatile ("blr %[loc]"
         :
