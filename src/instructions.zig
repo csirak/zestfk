@@ -53,6 +53,8 @@ pub fn execute(instr: []const u32) !void {
 
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
+    std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
+
     runAndRet(exec_ptr.ptr);
 }
 
