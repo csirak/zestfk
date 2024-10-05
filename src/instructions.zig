@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub fn ret(rn: u5) u32 {
-    const op: u32 = 0b1101011_0_0_10_11111_0000_00; // Opcode for RET
+    const op: u32 = 0b11010110010111110000001111000000; // Opcode for RET
     return op | @as(u32, rn) << 5;
 }
 
