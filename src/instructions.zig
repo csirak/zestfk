@@ -41,7 +41,6 @@ pub fn setZero(rd: u5) u32 {
 }
 
 pub fn execute(instr: []const u32) !void {
-    const ra = @returnAddress();
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
         null,
@@ -51,11 +50,10 @@ pub fn execute(instr: []const u32) !void {
         -1,
         0,
     );
-    _ = ra;
 
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
-    runAndRet(exec_mem_region.ptr);
+    runAndRet(exec_ptr.ptr);
 }
 
 fn runAndRet(location: *anyopaque) void {
