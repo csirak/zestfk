@@ -46,9 +46,8 @@ pub fn executeInstruction(instr: []const u32) !void {
         0,
     );
 
-    const exec_mem_region = std.mem.bytesAsSlice([]u32, exec_ptr);
-    std.debug.print("{} {}\n", .{ exec_mem_region.len, instr.len });
-    //@memcpy(exec_mem_region, instr);
+    const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
+    @memcpy(exec_mem_region, instr);
 }
 
 test "clear reg" {
@@ -61,5 +60,5 @@ test "clear reg" {
     asm volatile ("mov %[x], x4"
         : [x] "=r" (x),
     );
-    try std.testing.expectEqual(x, 0);
+    try std.testing.expectEqual(0, x);
 }
