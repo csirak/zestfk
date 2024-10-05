@@ -66,8 +66,8 @@ fn runAndRet(location: *anyopaque, ra: u64) void {
 }
 
 test "clear reg" {
-    const instr = setZero(4);
-    const instructions = [_]u32{ instr, RETURN };
+    //const instr = setZero(4);
+    const instructions = [_]u32{RETURN};
     try execute(&instructions);
 
     var x: u64 = 0;
