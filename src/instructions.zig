@@ -39,7 +39,7 @@ pub fn executeInstruction(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
         null,
-        @intCast(instr.len),
+        @intCast(instr.len * @sizeOf(u32)),
         prot.READ | prot.EXEC | prot.WRITE,
         .{ .TYPE = .PRIVATE, .ANONYMOUS = true },
         -1,
