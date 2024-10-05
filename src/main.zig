@@ -5,8 +5,6 @@ pub const instructions = @import("instructions.zig");
 pub fn main() !void {
     //    const instr = instructions.setZero(4);
 
-    const instrs = [_]u32{instructions.ret};
-    try instructions.execute(&instrs);
 }
 
 test {
