@@ -71,7 +71,7 @@ fn runAndRet(location: *anyopaque) void {
 
 test "clear reg" {
     //const instr = setZero(4);
-    const instructions = [_]u32{0xd65f03c0};
+    const instructions = [_]u32{0xC0035FD6};
     std.debug.print("inst: 0b{b}\n", .{ret(30)});
     try execute(&instructions);
 
