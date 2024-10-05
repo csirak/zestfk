@@ -6,9 +6,12 @@ pub fn main() !void {
     const instr = instructions.clearRegister(4);
 
     const instrs = [_]u32{instr};
-    try instructions.executeInstruction(&instrs);
+    try instructions.execute(&instrs);
 }
 
 test {
     std.testing.refAllDecls(@This());
 }
+
+// ra
+// sp
