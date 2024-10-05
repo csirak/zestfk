@@ -55,7 +55,7 @@ fn runAndRet(location: *anyopaque) void {
     );
 }
 fn setZero(rd: u5) u32 {
-    const opcode: u32 = 0b1_1010_1010_000_00000_000000_00000_00000;
+    const opcode: u32 = 0b11010101000000000000000000000000;
     const instruction: u32 = opcode | (@as(u32, rd) << 0) | (@as(u32, rd) << 5);
     return instruction;
 }
