@@ -67,7 +67,7 @@ test "clear reg" {
 }
 
 test "add reg" {
-    const instructions = [_]u32{ addi(4, 69), ret };
+    const instructions = [_]u32{ setZero(4), addi(4, 69), ret };
     try execute(&instructions);
 
     var x: u64 = 0;
