@@ -1,5 +1,6 @@
 const std = @import("std");
 
+pub const RETURN: u32 = 0xd65f03c0;
 pub fn addi(rd: u5, rn: u5, imm: u12) u32 {
     const op: u32 = 0b00_10001; // Opcode for ADD (immediate)
     const sf: u32 = 1; // 64-bit instruction
@@ -25,7 +26,7 @@ pub fn subi(rd: u5, rn: u5, imm: u12) u32 {
         @as(u32, rd);
 }
 
-pub fn clearRegister(rd: u5) u32 {
+pub fn setZero(rd: u5) u32 {
     const op: u32 = 0b100_10100_00000000000000; // Opcode for ORR (immediate)
     const sf: u32 = 1; // 1 for 64-bit, 0 for 32-bit
     const opc: u32 = 1; // For MOV alias of ORR
@@ -50,12 +51,23 @@ pub fn execute(instr: []const u32) !void {
 
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
+    runAndRet(exec_mem_region.ptr, @returnAddress());
+}
+
+fn runAndRet(location: *anyopaque, ra: u64) void {
+    asm volatile ("mov x30, %[ra]"
+        :
+        : [ra] "r" (ra),
+    );
+    asm volatile ("blr %[loc]"
+        :
+        : [loc] "r" (location),
+    );
 }
 
 test "clear reg" {
-    const instr = clearRegister(4);
-
-    const instructions = [_]u32{instr};
+    const instr = setZero(4);
+    const instructions = [_]u32{ instr, RETURN };
     try execute(&instructions);
 
     var x: u64 = 0;
