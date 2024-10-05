@@ -27,16 +27,6 @@ pub fn subi(rd: u5, rn: u5, imm: u12) u32 {
         @as(u32, rd);
 }
 
-pub fn setZero(rd: u5) u32 {
-    const op: u32 = 0b100_10100_00000000000000; // Opcode for ORR (immediate)
-    const sf: u32 = 1; // 1 for 64-bit, 0 for 32-bit
-    const opc: u32 = 1; // For MOV alias of ORR
-    return op |
-        sf << 31 |
-        opc << 29 |
-        @as(u32, rd);
-}
-
 pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -67,9 +57,10 @@ fn runAndRet(location: *anyopaque) void {
     );
 }
 
+const clear4 = 0xca040084;
 test "clear reg" {
     //const instr = setZero(4);
-    const instructions = [_]u32{ret};
+    const instructions = [_]u32{ clear4, ret };
     try execute(&instructions);
 
     var x: u64 = 0;
