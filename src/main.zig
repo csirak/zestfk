@@ -4,7 +4,8 @@ pub const instructions = @import("instructions.zig");
 
 pub fn main() !void {
     //    const instr = instructions.setZero(4);
-
+    //
+    asm volatile ("eor x4, x4, x4");
 }
 
 test {
