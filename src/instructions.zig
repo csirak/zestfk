@@ -41,7 +41,7 @@ pub fn executeInstruction(instr: []const u32) !void {
         null,
         @intCast(instr.len),
         prot.READ | prot.EXEC,
-        .PRIVATE,
+        .{ .ANONYMOUS = true },
         -1,
         0,
     );
