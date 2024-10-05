@@ -54,7 +54,7 @@ pub fn execute(instr: []const u32) !void {
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
-    std.debug.print("addr: 0x{x}\n", .{exec_mem_region.ptr});
+    std.debug.print("addr: {*}\n", .{exec_mem_region.ptr});
 
     runAndRet(exec_ptr.ptr);
 }
