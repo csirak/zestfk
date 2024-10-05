@@ -76,3 +76,14 @@ test "add reg" {
     );
     try std.testing.expectEqual(69, x);
 }
+
+test "sub reg" {
+    const instructions = [_]u32{ setZero(4), addi(4, 489), subi(4, 69), ret };
+    try execute(&instructions);
+
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    try std.testing.expectEqual(420, x);
+}
