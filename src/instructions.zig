@@ -54,6 +54,7 @@ pub fn execute(instr: []const u32) !void {
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
+    std.debug.print("addr: 0x{x}\n", .{exec_mem_region.ptr});
 
     runAndRet(exec_ptr.ptr);
 }
@@ -72,7 +73,6 @@ fn runAndRet(location: *anyopaque) void {
 test "clear reg" {
     //const instr = setZero(4);
     const instructions = [_]u32{0xC0035FD6};
-    std.debug.print("inst: 0b{b}\n", .{ret(30)});
     try execute(&instructions);
 
     var x: u64 = 0;
