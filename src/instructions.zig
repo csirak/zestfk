@@ -1,6 +1,10 @@
 const std = @import("std");
 
-pub const RETURN: u32 = 0xd65f03c0;
+pub fn ret(rn: u5) u32 {
+    const op: u32 = 0b1101011_0_0_10_11111_0000_0_0; // Opcode for RET
+    return op | @as(u32, rn) << 5;
+}
+
 pub fn addi(rd: u5, rn: u5, imm: u12) u32 {
     const op: u32 = 0b00_10001; // Opcode for ADD (immediate)
     const sf: u32 = 1; // 64-bit instruction
@@ -67,7 +71,7 @@ fn runAndRet(location: *anyopaque, ra: u64) void {
 
 test "clear reg" {
     //const instr = setZero(4);
-    const instructions = [_]u32{RETURN};
+    const instructions = [_]u32{ret(30)};
     try execute(&instructions);
 
     var x: u64 = 0;
