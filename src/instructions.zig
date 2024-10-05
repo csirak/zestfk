@@ -72,7 +72,7 @@ fn runAndRet(location: *anyopaque) void {
 test "clear reg" {
     //const instr = setZero(4);
     const instructions = [_]u32{ret(30)};
-    std.debug.print("inst: {}\n", .{ret(30)});
+    std.debug.print("inst: 0x{x}\n", .{ret(30)});
     try execute(&instructions);
 
     var x: u64 = 0;
