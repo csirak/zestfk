@@ -54,12 +54,16 @@ fn runAndRet(location: *anyopaque) void {
         : [loc] "r" (location),
     );
 }
-
+fn setZero(rd: u5) u32 {
+    const opcode: u32 = 0b1_1010_1010_000_00000_000000_00000_00000;
+    const instruction: u32 = opcode | (@as(u32, rd) << 0) | (@as(u32, rd) << 5);
+    return instruction;
+}
 pub const ret = 0xd65f03c0;
 const clear4 = 0xca040084;
 test "clear reg" {
     //const instr = setZero(4);
-    const instructions = [_]u32{ clear4, ret };
+    const instructions = [_]u32{ setZero(4), ret };
     try execute(&instructions);
 
     var x: u64 = 0;
