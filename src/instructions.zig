@@ -37,14 +37,18 @@ pub fn clearRegister(rd: u5) u32 {
 
 pub fn executeInstruction(instr: []const u32) !void {
     const prot = std.posix.PROT;
-    _ = try std.posix.mmap(
+    const exec_ptr = try std.posix.mmap(
         null,
         @intCast(instr.len),
-        prot.READ | prot.EXEC,
+        prot.READ | prot.EXEC | prot.WRITE,
         .{ .TYPE = .PRIVATE, .ANONYMOUS = true },
         -1,
         0,
     );
+
+    const exec_mem_region = std.mem.bytesAsSlice([]u32, exec_ptr);
+    std.debug.print("{} {}\n", .{ exec_mem_region.len, instr.len });
+    //@memcpy(exec_mem_region, instr);
 }
 
 test "clear reg" {
