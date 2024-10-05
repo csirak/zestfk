@@ -35,7 +35,7 @@ pub fn clearRegister(rd: u5) u32 {
         @as(u32, rd);
 }
 
-pub fn executeInstruction(instr: []const u32) void {
+pub fn executeInstruction(instr: []const u32) !void {
     const prot = std.posix.PROT;
     _ = try std.posix.mmap(
         null,
@@ -51,11 +51,11 @@ test "clear reg" {
     const instr = clearRegister(4);
 
     const instructions = [_]u32{instr};
-    executeInstruction(&instructions);
+    try executeInstruction(&instructions);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
         : [x] "=r" (x),
     );
-    std.testing.expectEqual(x, 0);
+    try std.testing.expectEqual(x, 0);
 }
