@@ -14,6 +14,7 @@ pub fn readHandler() void {
     const write_to: [*]u8 = @ptrFromInt(data_ptr);
     const stdin = std.io.getStdIn().reader();
     _ = stdin.read(write_to[0..1]) catch @panic("READ FAILED");
+    std.debug.print("READ BYTE: {c}", .{data_ptr[0]});
     epilogue(data_ptr, accum);
 }
 
