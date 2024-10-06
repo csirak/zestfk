@@ -1,7 +1,7 @@
 const std = @import("std");
 const azm = @import("asm.zig");
 
-pub const ret = 0xd65f03c0;
+pub const ret = 0xd61f0120;
 pub const nop = 0xd503201f;
 pub const ldda = 0xf9400085;
 
