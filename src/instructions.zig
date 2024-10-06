@@ -5,7 +5,7 @@ pub const ret = 0xd65f03c0;
 
 pub fn setZero(rd: u5) u32 {
     const opcode: u32 = 0xca000000;
-    const instruction: u32 = opcode | (@as(u32, rd) << 0) | (@as(u32, rd) << 5);
+    const instruction: u32 = opcode | (@as(u32, rd) << 0) | (@as(u32, rd) << 5) | (@as(u32, rd) << 15);
     return instruction;
 }
 
