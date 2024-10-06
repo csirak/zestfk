@@ -1,6 +1,6 @@
 const std = @import("std");
 const handlers = @import("handlers.zig");
-const azm = @import("asm.zig");
+pub const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
 
 pub const MEM_SIZE: usize = 30000;
@@ -95,7 +95,7 @@ test "call write" {
     const instrs = [_]u32{
         instructions.setZero(0),
         instructions.addi(0, 1),
-        instructions.blr(instructions.azm.WRITE_HANDLER),
+        instructions.blr(azm.WRITE_HANDLER),
         instructions.ret,
     };
     try execute(&instrs, MEM_SIZE);

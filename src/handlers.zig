@@ -15,8 +15,8 @@ inline fn epilogue(data_ptr: u64, accum: u64) void {
 }
 
 pub fn readHandler() void {
-    const data_ptr = instructions.getDataPtr();
-    const accum = instructions.getAccum();
+    const data_ptr = azm.getDataPtr();
+    const accum = azm.getAccum();
     const write_to: [*]u8 = @ptrFromInt(data_ptr);
     const stdin = std.io.getStdIn().reader();
     std.debug.print("ENTER BYTE: ", .{});
@@ -25,8 +25,8 @@ pub fn readHandler() void {
 }
 
 pub fn writeHandler() void {
-    const data_ptr = instructions.getDataPtr();
-    const accum = instructions.getAccum();
+    const data_ptr = azm.getDataPtr();
+    const accum = azm.getAccum();
     const read_from: *u8 = @ptrFromInt(data_ptr);
     std.debug.print("{c}", .{read_from.*});
     epilogue(data_ptr, accum);
