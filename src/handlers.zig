@@ -20,7 +20,7 @@ pub fn callHandler(handler_id: u64) callconv(.C) void {
 fn readHandler(data_ptr: u64) void {
     const write_to: [*]u8 = @ptrFromInt(data_ptr);
     const stdin = std.io.getStdIn().reader();
-    stdin.read(write_to[0..1]);
+    stdin.read(write_to[0..1]) catch @panic("READ FAILED");
 }
 
 fn writeHandler(data_ptr: u64) void {
