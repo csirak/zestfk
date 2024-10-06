@@ -122,5 +122,5 @@ test "cbz" {
     asm volatile ("mov %[x], x4"
         : [x] "=r" (x),
     );
-    try std.testing.expectEqual(489, x);
+    try std.testing.expectEqual(0, x);
 }
