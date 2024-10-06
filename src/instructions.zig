@@ -94,10 +94,10 @@ pub fn execute(instr: []const u32) !void {
 
     defer std.posix.munmap(exec_ptr);
 
+    writeHandler(@intFromPtr(&handlers.callHandler));
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
-    writeHandler(@intFromPtr(&handlers.callHandler));
     runAndRet(exec_ptr.ptr);
 }
 
