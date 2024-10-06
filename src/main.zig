@@ -11,7 +11,7 @@ pub fn main() !void {
         instructions.blr(azm.READ_HANDLER),
         instructions.ret,
     };
-    try runtime.execute(&instrs, 30000);
+    try runtime.execute(&instrs, 30000, std.heap.page_allocator);
 }
 
 test {
