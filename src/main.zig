@@ -18,6 +18,7 @@ pub fn main() !void {
     const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
 
+    
     try runtime.execute(instrs);
 }
 

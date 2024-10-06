@@ -1,7 +1,12 @@
 const std = @import("std");
+
 const handlers = @import("handlers.zig");
-pub const azm = @import("asm.zig");
+const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
+
+const cache = @cImport({
+    @cInclude("cache.h");
+});
 
 pub const MEM_SIZE = 30000;
 var memory = [_]u64{0} ** MEM_SIZE;
@@ -11,24 +16,19 @@ pub fn execute(instr: []const u32) !void {
     const exec_ptr = try std.posix.mmap(
         null,
         @intCast(instr.len * @sizeOf(u32)),
-        prot.READ | prot.EXEC | prot.WRITE,
+         prot.EXEC | prot.WRITE,
         .{ .TYPE = .PRIVATE, .ANONYMOUS = true },
         -1,
         0,
     );
-
-    // defer std.posix.munmap(exec_ptr);
-
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
-
-    std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
-    std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
-    std.debug.print("mem: 0x{*}\n", .{&memory});
+    cache.cache_clr(exec_ptr.ptr, @truncate( exec_ptr.len ));
 
 
     runAndRet(exec_ptr.ptr, &memory);
     asm volatile("add sp, sp, 0x50");
+    // std.posix.munmap(exec_ptr);
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
