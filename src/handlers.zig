@@ -33,6 +33,6 @@ pub fn writeHandler() callconv(.C) void {
     const ra = azm.getReturn();
     const read_from: *u64 = @ptrFromInt(data_ptr);
     const byte: u8 = @truncate(read_from.*);
-    std.debug.print("HEY: {c}\n", .{byte});
+    std.debug.print("{c}", .{byte});
     epilogue(data_ptr, accum, ra);
 }
