@@ -2,6 +2,7 @@ pub const DATA_PTR = 4;
 pub const ACCUM = 5;
 pub const READ_HANDLER = 6;
 pub const WRITE_HANDLER = 7;
+pub const RETRUN = 8;
 
 pub inline fn writeReadHandler(x: u64) void {
     asm volatile ("mov x6, %[x]"

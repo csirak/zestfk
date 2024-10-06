@@ -7,6 +7,7 @@ pub inline fn execPrologue() void {
     azm.writeWriteHandler(@intFromPtr(&writeHandler));
     azm.writeReadHandler(@intFromPtr(&readHandler));
 }
+
 inline fn epilogue(data_ptr: u64, accum: u64) void {
     azm.writeDataPtr(data_ptr);
     azm.writeAccum(accum);
@@ -14,7 +15,7 @@ inline fn epilogue(data_ptr: u64, accum: u64) void {
     azm.writeReadHandler(@intFromPtr(&readHandler));
 }
 
-pub fn readHandler() void {
+pub fn readHandler() callconv(.C) void {
     const data_ptr = azm.getDataPtr();
     const accum = azm.getAccum();
     const write_to: [*]u8 = @ptrFromInt(data_ptr);
@@ -24,11 +25,10 @@ pub fn readHandler() void {
     epilogue(data_ptr, accum);
 }
 
-pub fn writeHandler() void {
+pub fn writeHandler() callconv(.C) void {
     const data_ptr = azm.getDataPtr();
     const accum = azm.getAccum();
     const read_from: *u8 = @ptrFromInt(data_ptr);
     std.debug.print("HEY: {c}", .{read_from.*});
     epilogue(data_ptr, accum);
-    return;
 }
