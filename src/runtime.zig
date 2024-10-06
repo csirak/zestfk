@@ -39,11 +39,11 @@ fn runAndRet(location: *anyopaque, data: [*]u8) void {
 }
 
 test "clear reg" {
-    const instrs = [_]u32{ instructions.setZero(4), instructions.ret };
+    const instrs = [_]u32{ instructions.setZero(9), instructions.ret };
     try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
-    asm volatile ("mov %[x], x4"
+    asm volatile ("mov %[x], x9"
         : [x] "=r" (x),
     );
     try std.testing.expectEqual(0, x);
