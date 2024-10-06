@@ -40,7 +40,7 @@ fn runAndRet(location: *anyopaque, data: [*]u8) void {
 
 test "clear reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -50,7 +50,7 @@ test "clear reg" {
 }
 test "clear reg nop" {
     const instrs = [_]u32{ instructions.nop, instructions.setZero(4), instructions.nop, instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -61,7 +61,7 @@ test "clear reg nop" {
 
 test "add reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 69), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -71,7 +71,7 @@ test "add reg" {
 }
 test "add reg nop" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.setZero(4), instructions.addi(4, 69), instructions.setZero(4), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -82,7 +82,7 @@ test "add reg nop" {
 
 test "sub reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 489), instructions.subi(4, 69), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -93,7 +93,7 @@ test "sub reg" {
 
 test "cbnz" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 489), instructions.cbnz(4, 2), instructions.subi(4, 69), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -103,7 +103,7 @@ test "cbnz" {
 }
 test "cbz" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.cbz(4, 2), instructions.addi(4, 69), instructions.ret };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -118,7 +118,7 @@ test "call write" {
         instructions.blr(azm.WRITE_HANDLER),
         instructions.ret,
     };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -134,7 +134,7 @@ test "call read" {
         instructions.blr(azm.READ_HANDLER),
         instructions.ret,
     };
-    try execute(&instrs, MEM_SIZE);
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
