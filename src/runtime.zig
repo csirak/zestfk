@@ -17,6 +17,8 @@ pub fn execute(instr: []const u32) !void {
         0,
     );
 
+    // defer std.posix.munmap(exec_ptr);
+
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
@@ -24,9 +26,15 @@ pub fn execute(instr: []const u32) !void {
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
     std.debug.print("mem: 0x{*}\n", .{&memory});
 
+    const ra = @returnAddress();
+
     runAndRet(exec_ptr.ptr, &memory);
 
-    std.posix.munmap(exec_ptr);
+    asm volatile ("mov x30, %[x]"
+        :
+        : [x] "r" (ra),
+    );
+
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
@@ -34,10 +42,11 @@ fn runAndRet(location: *anyopaque, data: *anyopaque) void {
     azm.writeDataPtr(@intFromPtr(data));
     azm.writeAccum(0);
     azm.writeReturn(@returnAddress());
-    asm volatile ("br %[loc]"
+    asm volatile ("mov x12, %[x]"
         :
-        : [loc] "r" (location),
+        : [x] "r" (location),
     );
+    asm volatile ("br x12");
 }
 
 test "clear reg" {
