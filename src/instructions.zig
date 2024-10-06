@@ -96,7 +96,9 @@ pub fn execute(instr: []const u32) !void {
 
     defer std.posix.munmap(exec_ptr);
 
-    writeHandler(@intFromPtr(&handlers.callHandler));
+    const x: u64 = @intFromPtr(&handlers.callHandler);
+    std.debug.print("handlerFunc: 0x{x}", .{x});
+    writeHandler(x);
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
