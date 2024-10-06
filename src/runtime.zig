@@ -34,7 +34,7 @@ fn runAndRet(location: *anyopaque, data: *anyopaque) void {
     azm.writeDataPtr(@intFromPtr(data));
     azm.writeAccum(0);
     azm.writeReturn(@returnAddress());
-    asm volatile ("blr %[loc]"
+    asm volatile ("br %[loc]"
         :
         : [loc] "r" (location),
     );
