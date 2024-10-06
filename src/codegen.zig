@@ -5,7 +5,7 @@ const instructions = @import("instructions.zig");
 const azm = @import("asm.zig");
 
 pub fn codegen(instrs: std.ArrayList(parser.Instruction), allocator: std.mem.Allocator) ![]u32 {
-    var aarch64_instrs = try allocator.alloc(u32, instrs.items.len * 2);
+    var aarch64_instrs = try allocator.alloc(u32, instrs.items.len * 2 + 1);
     for (instrs.items, 0..) |instr, i| {
         aarch64_instrs[2 * i] = switch (instr.command) {
             .right => instructions.addi(azm.DATA_PTR, @truncate(instr.value)),
@@ -23,6 +23,6 @@ pub fn codegen(instrs: std.ArrayList(parser.Instruction), allocator: std.mem.All
             else => instructions.nop,
         };
     }
-
+    aarch64_instrs[aarch64_instrs.len - 1] = instructions.ret;
     return aarch64_instrs;
 }
