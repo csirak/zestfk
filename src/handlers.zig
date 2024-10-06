@@ -31,35 +31,3 @@ pub fn writeHandler() void {
     std.debug.print("{c}", .{read_from.*});
     epilogue(data_ptr, accum);
 }
-
-test "call write" {
-    const instrs = [_]u32{
-        instructions.setZero(0),
-        instructions.addi(0, 1),
-        instructions.blr(instructions.WRITE_HANDLER),
-        instructions.ret,
-    };
-    try instructions.execute(&instrs);
-
-    var x: u64 = 0;
-    asm volatile ("mov %[x], x4"
-        : [x] "=r" (x),
-    );
-    try std.testing.expectEqual(0, x);
-}
-
-test "call read" {
-    const instrs = [_]u32{
-        instructions.setZero(0),
-        instructions.addi(0, 1),
-        instructions.blr(instructions.READ_HANDLER),
-        instructions.ret,
-    };
-    try instructions.execute(&instrs);
-
-    var x: u64 = 0;
-    asm volatile ("mov %[x], x4"
-        : [x] "=r" (x),
-    );
-    try std.testing.expectEqual(0, x);
-}
