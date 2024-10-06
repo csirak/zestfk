@@ -45,7 +45,7 @@ test "call read" {
     const instrs = [_]u32{
         instructions.setZero(0),
         instructions.addi(0, 1),
-        instructions.blr(instructions.WRITE_HANDLER),
+        instructions.blr(instructions.READ_HANDLER),
         instructions.ret,
     };
     try instructions.execute(&instrs);
