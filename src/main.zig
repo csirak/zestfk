@@ -12,7 +12,7 @@ pub fn main() !void {
     const instrs = try codegen.codegen(parsed, alloc);
 
     for (instrs, 0..) |instr, i| {
-        std.debug.print("ins: {} ptr: {x}\n", .{ instr, i * 4 });
+        std.debug.print("ins: {x} ptr: {x}\n", .{ instr, i * 4 });
     }
     try runtime.execute(instrs, 30000, alloc);
 }
