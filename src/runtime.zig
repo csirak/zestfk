@@ -4,7 +4,7 @@ pub const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
 
 pub const MEM_SIZE = 30000;
-var memory = [_]u8{0} ** MEM_SIZE;
+var memory = [_]u64{0} ** MEM_SIZE;
 
 pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
