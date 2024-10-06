@@ -4,6 +4,7 @@ pub const handlers = @import("handlers.zig");
 const HANDLER = 3;
 const DATA_PTR = 4;
 const ACCUM = 5;
+pub const ret = 0xd65f03c0;
 
 pub fn writeHandler(x: u64) void {
     asm volatile ("mov x3, %[x]"
@@ -110,8 +111,6 @@ fn runAndRet(location: *anyopaque) void {
         : [loc] "r" (location),
     );
 }
-
-pub const ret = 0xd65f03c0;
 
 test "clear reg" {
     const instructions = [_]u32{ setZero(4), ret };
