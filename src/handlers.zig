@@ -4,7 +4,7 @@ const instructions = @import("instructions.zig");
 const READ_HANDLER = 0;
 const WRITE_HANDLER = 1;
 
-pub fn callHandler(handler_id: u64) callconv(.C) void {
+pub fn callHandler(handler_id: u64) void {
     const data_ptr = instructions.getDataPtr();
     const accum = instructions.getAccum();
     switch (handler_id) {

@@ -108,7 +108,6 @@ pub fn execute(instr: []const u32) !void {
 
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
-    std.debug.print("handler: 0x{x}\n", .{getHandler()});
     runAndRet(exec_ptr.ptr);
 }
 
