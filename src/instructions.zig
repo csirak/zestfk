@@ -6,7 +6,7 @@ const DATA_PTR = 4;
 const ACCUM = 5;
 
 pub fn writeHandler(x: u64) void {
-    asm volatile ("mov x3 %[x]"
+    asm volatile ("mov x3, %[x]"
         :
         : [x] "r" (x),
     );
