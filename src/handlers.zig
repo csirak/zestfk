@@ -30,4 +30,5 @@ pub fn writeHandler() void {
     const read_from: *u8 = @ptrFromInt(data_ptr);
     std.debug.print("HEY: {c}", .{read_from.*});
     epilogue(data_ptr, accum);
+    return;
 }
