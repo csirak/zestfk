@@ -30,7 +30,7 @@ pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator
     runAndRet(exec_ptr.ptr, data.ptr);
 }
 
-fn runAndRet(location: *anyopaque, data: [*]u8) void {
+fn runAndRet(location: *anyopaque, data: [*]u32) void {
     handlers.execPrologue();
     azm.writeDataPtr(@intFromPtr(data));
     azm.writeAccum(0);
