@@ -1,5 +1,5 @@
 const std = @import("std");
-const instructions = @import("instructions.zig");
+pub const instructions = @import("instructions.zig");
 
 const READ_HANDLER = 0;
 const WRITE_HANDLER = 1;
