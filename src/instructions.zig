@@ -1,5 +1,5 @@
 const std = @import("std");
-const azm = @import("azm.zig");
+const azm = @import("asm.zig");
 
 pub const ret = 0xd65f03c0;
 
