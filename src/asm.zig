@@ -3,14 +3,6 @@ pub const ACCUM = 5;
 pub const READ_HANDLER = 6;
 pub const WRITE_HANDLER = 7;
 
-pub fn getHandler() u64 {
-    var x: u64 = 0;
-    asm volatile ("mov %[x], x3"
-        : [x] "=r" (x),
-    );
-    return x;
-}
-
 pub inline fn writeReadHandler(x: u64) void {
     asm volatile ("mov x6, %[x]"
         :
