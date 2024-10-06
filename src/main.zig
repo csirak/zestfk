@@ -6,10 +6,16 @@ pub const codegen = @import("codegen.zig");
 pub const azm = @import("asm.zig");
 
 pub fn main() !void {
-    const code = ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+.";
+    // const code = ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+.";
     //const code = ".";
     const alloc = std.heap.page_allocator;
-    const parsed = try parser.parse(code, alloc);
+
+    const file = try std.fs.cwd().openFile("foo.txt", .{});
+    defer file.close();
+
+    const code = try file.readToEndAlloc(alloc, std.math.maxInt(usize));
+    defer alloc.free(content);
+        const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
 
     for (instrs, 0..) |instr, i| {
