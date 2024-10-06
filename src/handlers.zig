@@ -28,6 +28,6 @@ pub fn writeHandler() void {
     const data_ptr = azm.getDataPtr();
     const accum = azm.getAccum();
     const read_from: *u8 = @ptrFromInt(data_ptr);
-    std.debug.print("{c}", .{read_from.*});
+    std.debug.print("HEY: {c}", .{read_from.*});
     epilogue(data_ptr, accum);
 }
