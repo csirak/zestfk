@@ -30,6 +30,13 @@ pub fn cbnz(rd: u5, label: i19) u32 {
         @as(u32, rd);
 }
 
+pub fn cbz(rd: u5, label: i19) u32 {
+    const opcode: u32 = 0xb4000000;
+    return opcode |
+        @as(u32, @intCast(label)) << 5 |
+        @as(u32, rd);
+}
+
 pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -99,6 +106,16 @@ test "sub reg" {
 
 test "cbnz" {
     const instructions = [_]u32{ setZero(4), addi(4, 489), cbnz(4, 2), subi(4, 69), ret };
+    try execute(&instructions);
+
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    try std.testing.expectEqual(489, x);
+}
+test "cbz" {
+    const instructions = [_]u32{ setZero(4), cbz(4, 2), addi(4, 69), ret };
     try execute(&instructions);
 
     var x: u64 = 0;
