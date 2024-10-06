@@ -8,8 +8,8 @@ pub fn codegen(instrs: std.ArrayList(parser.Instruction), allocator: std.mem.All
     var aarch64_instrs = try allocator.alloc(u32, instrs.items.len * 2 + 1);
     for (instrs.items, 0..) |instr, i| {
         aarch64_instrs[2 * i] = switch (instr.command) {
-            .right => instructions.addi(azm.DATA_PTR, @truncate(instr.value * 4)),
-            .left => instructions.subi(azm.DATA_PTR, @truncate(instr.value * 4)),
+            .right => instructions.addi(azm.DATA_PTR, @truncate(instr.value * 8)),
+            .left => instructions.subi(azm.DATA_PTR, @truncate(instr.value * 8)),
             .jumpIfNotZero => instructions.cbnz(azm.ACCUM, @intCast(instr.value * 2)),
             .jumpBackIf => instructions.cbz(azm.ACCUM, @intCast(instr.value * 2)),
             .inc => instructions.addi(azm.ACCUM, @truncate(instr.value)),
