@@ -103,7 +103,6 @@ pub fn execute(instr: []const u32) !void {
 
     defer std.posix.munmap(exec_ptr);
 
-    std.debug.print("handlerFunc: 0x{x}", .{x});
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
