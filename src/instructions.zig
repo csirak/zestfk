@@ -26,7 +26,7 @@ pub fn subi(rd: u5, imm: u12) u32 {
 pub fn cbnz(rd: u5, label: i19) u32 {
     const opcode: u32 = 0xb5000000;
     return opcode |
-        @as(u32, label) << 5 |
+        @as(u32, @bitCast(label)) << 5 |
         @as(u32, rd);
 }
 
