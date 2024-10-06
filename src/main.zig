@@ -22,7 +22,7 @@ pub fn main() !void {
     for (instrs, 0..) |instr, i| {
         std.debug.print("ins: {x} ptr: {x}\n", .{ instr, i * 4 });
     }
-    try runtime.execute(instrs, 30000, alloc);
+    try runtime.execute(instrs);
 }
 
 test {

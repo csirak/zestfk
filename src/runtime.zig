@@ -3,9 +3,10 @@ const handlers = @import("handlers.zig");
 pub const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
 
-pub const MEM_SIZE: usize = 30000;
+pub const MEM_SIZE = 30000;
+var memory = [_]u8{0} ** MEM_SIZE;
 
-pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator) !void {
+pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
         null,
@@ -16,18 +17,14 @@ pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator
         0,
     );
 
-    const data = try allocator.alloc(u64, mem_size);
-    @memset(data, 0);
-    defer allocator.free(data);
-
-    defer std.posix.munmap(exec_ptr);
-
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
-    runAndRet(exec_ptr.ptr, data.ptr);
+    runAndRet(exec_ptr.ptr, &memory);
+
+    std.posix.munmap(exec_ptr);
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
