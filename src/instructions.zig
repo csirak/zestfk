@@ -1,9 +1,11 @@
 const std = @import("std");
 pub const handlers = @import("handlers.zig");
 
-const HANDLER = 3;
 const DATA_PTR = 4;
 const ACCUM = 5;
+const READ_HANDLER = 6;
+const WRITE_HANDLER = 7;
+
 pub const ret = 0xd65f03c0;
 
 pub fn getHandler() u64 {
@@ -13,12 +15,21 @@ pub fn getHandler() u64 {
     );
     return x;
 }
-pub inline fn writeHandler(x: u64) void {
-    asm volatile ("mov x3, %[x]"
+
+pub inline fn writeReadHandler(x: u64) void {
+    asm volatile ("mov x6, %[x]"
         :
         : [x] "r" (x),
     );
 }
+
+pub inline fn writeWriteHandler(x: u64) void {
+    asm volatile ("mov x7, %[x]"
+        :
+        : [x] "r" (x),
+    );
+}
+
 pub inline fn getDataPtr() u64 {
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -112,7 +123,8 @@ pub fn execute(instr: []const u32) !void {
 }
 
 fn runAndRet(location: *anyopaque) void {
-    writeHandler(@intFromPtr(&handlers.callHandler));
+    writeReadHandler(@intFromPtr(&handlers.readHandler));
+    writeWriteHandler(@intFromPtr(&handlers.writeHandler));
     asm volatile ("blr %[loc]"
         :
         : [loc] "r" (location),
