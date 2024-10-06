@@ -22,6 +22,7 @@ pub fn execute(instr: []const u32) !void {
 
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
+    @breakpoint();
     runAndRet(exec_ptr.ptr, &memory);
 
     std.posix.munmap(exec_ptr);
