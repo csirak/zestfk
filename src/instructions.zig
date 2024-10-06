@@ -3,8 +3,9 @@ const azm = @import("asm.zig");
 
 // set to return with x8
 pub const ret = 0xd61f0200;
-pub const nop = 0xd503201f;
+pub const nop = 0x910000a5;
 pub const ldda = 0xf9400085;
+pub const stda = 0xf9000085;
 
 pub fn setZero(rd: u5) u32 {
     const opcode: u32 = 0xca000000;
@@ -30,15 +31,16 @@ pub fn subi(rd: u5, imm: u12) u32 {
 
 pub fn cbnz(rd: u5, label: i19) u32 {
     const opcode: u32 = 0xb5000000;
+    
     return opcode |
-        @as(u32, @intCast(label)) << 5 |
+        @as(u32, @as(u19, @bitCast(label )) ) << 5 |
         @as(u32, rd);
 }
 
 pub fn cbz(rd: u5, label: i19) u32 {
     const opcode: u32 = 0xb4000000;
     return opcode |
-        @as(u32, @intCast(label)) << 5 |
+        @as(u32, @as(u19, @bitCast(label )) ) << 5 |
         @as(u32, rd);
 }
 

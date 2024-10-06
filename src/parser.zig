@@ -90,7 +90,8 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
             .jumpBackIf => {
                 const jump = jumpstack.pop();
                 cur_value = @intCast(jump);
-                instructions.items[jump].value = @truncate(instructions.items.len);
+            cur_value -= @as(u16, @truncate( instructions.items.len  ));
+                instructions.items[jump].value = @truncate(@abs(cur_value)) ;
             },
             else => {},
         }
