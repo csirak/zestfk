@@ -98,7 +98,7 @@ test "sub reg" {
 }
 
 test "cbnz" {
-    const instructions = [_]u32{ setZero(4), addi(4, 489), cbnz(4, 1), subi(4, 69), ret };
+    const instructions = [_]u32{ setZero(4), addi(4, 489), cbnz(4, 2), subi(4, 69), ret };
     try execute(&instructions);
 
     var x: u64 = 0;
