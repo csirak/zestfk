@@ -113,7 +113,8 @@ pub fn execute(instr: []const u32) !void {
         0,
     );
 
-    const data = std.heap.page_allocator.alloc(u8, MEM_SIZE);
+    const data = try std.heap.page_allocator.alloc(u8, MEM_SIZE);
+    defer std.heap.page_allocator.free(data);
 
     defer std.posix.munmap(exec_ptr);
 
