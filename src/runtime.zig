@@ -5,7 +5,7 @@ const instructions = @import("instructions.zig");
 
 pub const MEM_SIZE: usize = 30000;
 
-pub fn execute(instr: []const u32, mem_size: usize) !void {
+pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
         null,
@@ -16,8 +16,8 @@ pub fn execute(instr: []const u32, mem_size: usize) !void {
         0,
     );
 
-    const data = try std.heap.page_allocator.alloc(u8, mem_size);
-    defer std.heap.page_allocator.free(data);
+    const data = try allocator.alloc(u8, mem_size);
+    defer allocator.free(data);
 
     defer std.posix.munmap(exec_ptr);
 
@@ -48,9 +48,29 @@ test "clear reg" {
     );
     try std.testing.expectEqual(0, x);
 }
+test "clear reg nop" {
+    const instrs = [_]u32{ instructions.nop, instructions.setZero(4), instructions.nop, instructions.ret };
+    try execute(&instrs, MEM_SIZE);
+
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    try std.testing.expectEqual(0, x);
+}
 
 test "add reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 69), instructions.ret };
+    try execute(&instrs, MEM_SIZE);
+
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    try std.testing.expectEqual(69, x);
+}
+test "add reg nop" {
+    const instrs = [_]u32{ instructions.setZero(4), instructions.setZero(4), instructions.addi(4, 69), instructions.setZero(4), instructions.ret };
     try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
