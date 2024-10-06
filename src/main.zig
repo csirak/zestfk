@@ -14,8 +14,8 @@ pub fn main() !void {
     defer file.close();
 
     const code = try file.readToEndAlloc(alloc, std.math.maxInt(usize));
-    defer alloc.free(content);
-        const parsed = try parser.parse(code, alloc);
+    defer alloc.free(code);
+    const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
 
     for (instrs, 0..) |instr, i| {
