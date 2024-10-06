@@ -48,7 +48,7 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
     var cur_command: usize = 0;
     while (cur_command < code.len) {
         switch (code[cur_command]) {
-            ' ', '\n', '\t', '\r' => {
+            ' ', '\n', 10, '\t', '\r' => {
                 cur_command += 1;
                 continue;
             },
