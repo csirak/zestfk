@@ -1,10 +1,11 @@
 const std = @import("std");
 pub const handlers = @import("handlers.zig");
 
-const DATA_PTR = 4;
-const ACCUM = 5;
-const READ_HANDLER = 6;
-const WRITE_HANDLER = 7;
+pub const MEM_SIZE = 30_000;
+pub const DATA_PTR = 4;
+pub const ACCUM = 5;
+pub const READ_HANDLER = 6;
+pub const WRITE_HANDLER = 7;
 
 pub const ret = 0xd65f03c0;
 
@@ -112,6 +113,8 @@ pub fn execute(instr: []const u32) !void {
         0,
     );
 
+    const data = std.heap.page_allocator.alloc(u8, MEM_SIZE);
+
     defer std.posix.munmap(exec_ptr);
 
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
@@ -119,12 +122,13 @@ pub fn execute(instr: []const u32) !void {
 
     std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
-    runAndRet(exec_ptr.ptr);
+    runAndRet(exec_ptr.ptr, data.ptr);
 }
 
-fn runAndRet(location: *anyopaque) void {
+fn runAndRet(location: *anyopaque, data: [*]u8) void {
     writeReadHandler(@intFromPtr(&handlers.readHandler));
     writeWriteHandler(@intFromPtr(&handlers.writeHandler));
+    writeDataPtr(@intFromPtr(data));
     asm volatile ("blr %[loc]"
         :
         : [loc] "r" (location),
