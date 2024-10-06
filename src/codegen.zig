@@ -14,13 +14,12 @@ pub fn codegen(instrs: std.ArrayList(parser.Instruction), allocator: std.mem.All
             .jumpBackIf => instructions.cbz(azm.ACCUM, @intCast(instr.value * 2)),
             .inc => instructions.addi(azm.ACCUM, @truncate(instr.value)),
             .dec => instructions.subi(azm.ACCUM, @truncate(instr.value)),
-            else => instructions.nop,
+            .read => instructions.blr(azm.READ_HANDLER),
+            .write => instructions.blr(azm.WRITE_HANDLER),
         };
 
         aarch64_instrs[2 * i + 1] = switch (instr.command) {
             .left, .right => instructions.ldda,
-            .read => instructions.blr(azm.READ_HANDLER),
-            .write => instructions.blr(azm.WRITE_HANDLER),
             else => instructions.nop,
         };
     }
