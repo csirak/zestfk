@@ -13,7 +13,7 @@ pub fn getHandler() u64 {
     );
     return x;
 }
-pub fn writeHandler(x: u64) void {
+pub inline fn writeHandler(x: u64) void {
     asm volatile ("mov x3, %[x]"
         :
         : [x] "r" (x),
@@ -103,9 +103,7 @@ pub fn execute(instr: []const u32) !void {
 
     defer std.posix.munmap(exec_ptr);
 
-    const x: u64 = @intFromPtr(&handlers.callHandler);
     std.debug.print("handlerFunc: 0x{x}", .{x});
-    writeHandler(x);
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
@@ -116,6 +114,7 @@ pub fn execute(instr: []const u32) !void {
 }
 
 fn runAndRet(location: *anyopaque) void {
+    writeHandler(@intFromPtr(&handlers.callHandler));
     asm volatile ("blr %[loc]"
         :
         : [loc] "r" (location),
