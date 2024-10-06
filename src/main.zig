@@ -6,7 +6,7 @@ pub const codegen = @import("codegen.zig");
 pub const azm = @import("asm.zig");
 
 pub fn main() !void {
-    const code = ">>>+++";
+    const code = ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+.";
     const alloc = std.heap.page_allocator;
     const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
