@@ -48,7 +48,7 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
     var cur_command: usize = 0;
     while (cur_command < code.len) {
         switch (code[cur_command]) {
-            ' ', '\n', 10, '\t', '\r' => {
+            ' ', '\n', '\t', '\r' => {
                 cur_command += 1;
                 continue;
             },
@@ -59,6 +59,13 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
         cur_command += 1;
 
         while (cur_command < code.len) : (cur_command += 1) {
+            switch (code[cur_command]) {
+                ' ', '\n', '\t', '\r' => {
+                    cur_command += 1;
+                    continue;
+                },
+                else => {},
+            }
             const next_command_type = commandType(code[cur_command]);
 
             if (next_command_type != cur_command_type and
