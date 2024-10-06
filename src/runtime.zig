@@ -3,6 +3,7 @@ const handlers = @import("handlers.zig");
 const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
 
+pub const MEM_SIZE: usize = 30000;
 pub fn execute(instr: []const u32, mem_size: usize) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -38,7 +39,7 @@ fn runAndRet(location: *anyopaque, data: [*]u8) void {
 
 test "clear reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.ret };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -49,7 +50,7 @@ test "clear reg" {
 
 test "add reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 69), instructions.ret };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -60,7 +61,7 @@ test "add reg" {
 
 test "sub reg" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 489), instructions.subi(4, 69), instructions.ret };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -71,7 +72,7 @@ test "sub reg" {
 
 test "cbnz" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.addi(4, 489), instructions.cbnz(4, 2), instructions.subi(4, 69), instructions.ret };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -81,7 +82,7 @@ test "cbnz" {
 }
 test "cbz" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.cbz(4, 2), instructions.addi(4, 69), instructions.ret };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -96,7 +97,7 @@ test "call write" {
         instructions.blr(instructions.WRITE_HANDLER),
         instructions.ret,
     };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
@@ -112,7 +113,7 @@ test "call read" {
         instructions.blr(instructions.READ_HANDLER),
         instructions.ret,
     };
-    try execute(&instrs);
+    try execute(&instrs, MEM_SIZE);
 
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
