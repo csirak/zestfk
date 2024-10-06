@@ -4,6 +4,7 @@ const azm = @import("asm.zig");
 const instructions = @import("instructions.zig");
 
 pub const MEM_SIZE: usize = 30000;
+
 pub fn execute(instr: []const u32, mem_size: usize) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -94,7 +95,7 @@ test "call write" {
     const instrs = [_]u32{
         instructions.setZero(0),
         instructions.addi(0, 1),
-        instructions.blr(instructions.WRITE_HANDLER),
+        instructions.blr(instructions.azm.WRITE_HANDLER),
         instructions.ret,
     };
     try execute(&instrs, MEM_SIZE);
@@ -110,7 +111,7 @@ test "call read" {
     const instrs = [_]u32{
         instructions.setZero(0),
         instructions.addi(0, 1),
-        instructions.blr(instructions.READ_HANDLER),
+        instructions.blr(azm.READ_HANDLER),
         instructions.ret,
     };
     try execute(&instrs, MEM_SIZE);
