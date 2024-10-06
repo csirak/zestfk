@@ -81,6 +81,7 @@ pub fn blr(rd: u5) u32 {
     const opcode: u32 = 0xd63f0000;
     return opcode | @as(u32, rd) << 1;
 }
+
 pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -98,7 +99,7 @@ pub fn execute(instr: []const u32) !void {
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
-    std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
+    std.debug.print("inst: 0x{x}\n", .{exec_mem_region[2]});
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
     runAndRet(exec_ptr.ptr);
 }
