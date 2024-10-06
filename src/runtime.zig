@@ -16,7 +16,7 @@ pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator
         0,
     );
 
-    const data = try allocator.alloc(u8, mem_size);
+    const data = try allocator.alloc(u32, mem_size);
     @memset(data, 0);
     defer allocator.free(data);
 
