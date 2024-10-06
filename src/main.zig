@@ -10,6 +10,10 @@ pub fn main() !void {
     const alloc = std.heap.page_allocator;
     const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
+
+    for (instrs, 0..) |instr, i| {
+        std.debug.print("ins: {} ptr: {x}", .{ instr, i * 4 });
+    }
     try runtime.execute(instrs, 30000, alloc);
 }
 
