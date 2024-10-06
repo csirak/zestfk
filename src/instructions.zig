@@ -1,7 +1,8 @@
 const std = @import("std");
 const azm = @import("asm.zig");
 
-pub const ret = 0xd61f0120;
+// set to return with x8
+pub const ret = 0xd61f0100;
 pub const nop = 0xd503201f;
 pub const ldda = 0xf9400085;
 
