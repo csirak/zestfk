@@ -18,7 +18,7 @@ pub fn main() !void {
     const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
 
-    std.debug.print("code: {s}", .{code})
+    std.debug.print("code: {s}", .{code});
     for (instrs, 0..) |instr, i| {
         std.debug.print("ins: {x} ptr: {x}\n", .{ instr, i * 4 });
     }
