@@ -1,4 +1,44 @@
 const std = @import("std");
+pub const handlers = @import("handlers.zig");
+
+const HANDLER = 3;
+const DATA_PTR = 4;
+const ACCUM = 5;
+
+pub fn writeHandler(x: u64) void {
+    asm volatile ("mov x3 %[x]"
+        :
+        : [x] "r" (x),
+    );
+}
+pub fn getDataPtr() u64 {
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    return x;
+}
+
+pub fn writeDataPtr(x: u64) void {
+    asm volatile ("mov x4, %[x]"
+        :
+        : [x] "r" (x),
+    );
+}
+
+pub fn getAccum() u64 {
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x5"
+        : [x] "=r" (x),
+    );
+    return x;
+}
+pub fn writeAccum(x: u64) void {
+    asm volatile ("mov x5, %[x]"
+        :
+        : [x] "r" (x),
+    );
+}
 
 pub fn setZero(rd: u5) u32 {
     const opcode: u32 = 0xca000000;
@@ -37,6 +77,10 @@ pub fn cbz(rd: u5, label: i19) u32 {
         @as(u32, rd);
 }
 
+pub fn blr(rd: u5) u32 {
+    const opcode: u32 = 0xd63f0000;
+    return opcode | @as(u32, rd) << 1;
+}
 pub fn execute(instr: []const u32) !void {
     const prot = std.posix.PROT;
     const exec_ptr = try std.posix.mmap(
@@ -53,16 +97,11 @@ pub fn execute(instr: []const u32) !void {
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
-    std.debug.print("inst: 0x{x}\n", .{exec_mem_region[0]});
-    std.debug.print("addr: {*}\n", .{exec_mem_region.ptr});
+    writeHandler(@intFromPtr(&handlers.callHandler));
     runAndRet(exec_ptr.ptr);
 }
 
 fn runAndRet(location: *anyopaque) void {
-    asm volatile ("mov x30, %[ra]"
-        :
-        : [ra] "r" (@returnAddress()),
-    );
     asm volatile ("blr %[loc]"
         :
         : [loc] "r" (location),
