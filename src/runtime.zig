@@ -48,6 +48,7 @@ test "clear reg" {
     );
     try std.testing.expectEqual(0, x);
 }
+
 test "clear reg nop" {
     const instrs = [_]u32{ instructions.nop, instructions.setZero(4), instructions.nop, instructions.ret };
     try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
@@ -69,6 +70,18 @@ test "add reg" {
     );
     try std.testing.expectEqual(69, x);
 }
+
+test "ldda" {
+    const instrs = [_]u32{ instructions.setZero(azm.ACCUM), instructions.addi(azm.ACCUM, 69), instructions.ldda, instructions.ret };
+    try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
+
+    var x: u64 = 0;
+    asm volatile ("mov %[x], x4"
+        : [x] "=r" (x),
+    );
+    try std.testing.expectEqual(0, x);
+}
+
 test "add reg nop" {
     const instrs = [_]u32{ instructions.setZero(4), instructions.setZero(4), instructions.addi(4, 69), instructions.setZero(4), instructions.ret };
     try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
@@ -111,6 +124,7 @@ test "cbz" {
     );
     try std.testing.expectEqual(0, x);
 }
+
 test "call write" {
     const instrs = [_]u32{
         instructions.setZero(0),
