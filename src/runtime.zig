@@ -32,6 +32,7 @@ pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator
 fn runAndRet(location: *anyopaque, data: [*]u8) void {
     handlers.execPrologue();
     azm.writeDataPtr(@intFromPtr(data));
+    azm.writeAccum(0);
     asm volatile ("blr %[loc]"
         :
         : [loc] "r" (location),
