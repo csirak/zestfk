@@ -26,15 +26,9 @@ pub fn execute(instr: []const u32) !void {
     std.debug.print("ptr: 0x{*}\n", .{exec_mem_region.ptr});
     std.debug.print("mem: 0x{*}\n", .{&memory});
 
-    const ra = @returnAddress();
 
     runAndRet(exec_ptr.ptr, &memory);
-
-    asm volatile ("mov x30, %[x]"
-        :
-        : [x] "r" (ra),
-    );
-
+    asm volatile("add sp, sp, 0x50");
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
