@@ -41,6 +41,8 @@ pub fn execute(instr: []const u32) !void {
         0,
     );
 
+    defer std.posix.munmap(exec_ptr);
+
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
 
@@ -96,7 +98,7 @@ test "sub reg" {
 }
 
 test "cbnz" {
-    const instructions = [_]u32{ setZero(4), addi(4, 489), cbnz(4, 1), subi(4, 69), ret };
+    const instructions = [_]u32{ setZero(4), addi(4, 489), cbnz(4, 4), subi(4, 69), ret };
     try execute(&instructions);
 
     var x: u64 = 0;
