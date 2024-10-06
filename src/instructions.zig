@@ -19,7 +19,7 @@ pub inline fn writeHandler(x: u64) void {
         : [x] "r" (x),
     );
 }
-pub fn getDataPtr() u64 {
+pub inline fn getDataPtr() u64 {
     var x: u64 = 0;
     asm volatile ("mov %[x], x4"
         : [x] "=r" (x),
@@ -34,7 +34,7 @@ pub fn writeDataPtr(x: u64) void {
     );
 }
 
-pub fn getAccum() u64 {
+pub inline fn getAccum() u64 {
     var x: u64 = 0;
     asm volatile ("mov %[x], x5"
         : [x] "=r" (x),
@@ -87,7 +87,7 @@ pub fn cbz(rd: u5, label: i19) u32 {
 
 pub fn blr(rd: u5) u32 {
     const opcode: u32 = 0xd63f0000;
-    return opcode | @as(u32, rd) << 1;
+    return opcode | @as(u32, rd) << 5;
 }
 
 pub fn execute(instr: []const u32) !void {
