@@ -99,7 +99,10 @@ inline fn commandType(cmd: u8) Command {
         '.' => .write,
         '[' => .jumpIfNotZero,
         ']' => .jumpBackIf,
-        else => @panic("invalid command"),
+        else => {
+            std.debug.print("MESS IP: {}", .{cmd});
+            @panic("invalid command");
+        },
     };
 }
 
