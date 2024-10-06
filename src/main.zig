@@ -15,10 +15,10 @@ pub fn main() !void {
 
     const code = try file.readToEndAlloc(alloc, std.math.maxInt(usize));
     defer alloc.free(code);
+    std.debug.print("code: {s}", .{code});
     const parsed = try parser.parse(code, alloc);
     const instrs = try codegen.codegen(parsed, alloc);
 
-    std.debug.print("code: {s}", .{code});
     for (instrs, 0..) |instr, i| {
         std.debug.print("ins: {x} ptr: {x}\n", .{ instr, i * 4 });
     }
