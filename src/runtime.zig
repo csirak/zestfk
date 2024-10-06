@@ -17,6 +17,7 @@ pub fn execute(instr: []const u32, mem_size: usize, allocator: std.mem.Allocator
     );
 
     const data = try allocator.alloc(u8, mem_size);
+    @memset(data, 0);
     defer allocator.free(data);
 
     defer std.posix.munmap(exec_ptr);
@@ -77,7 +78,7 @@ test "ldda" {
     try execute(&instrs, MEM_SIZE, std.heap.page_allocator);
 
     var x: u64 = 0;
-    asm volatile ("mov %[x], x4"
+    asm volatile ("mov %[x], x5"
         : [x] "=r" (x),
     );
     try std.testing.expectEqual(0, x);
