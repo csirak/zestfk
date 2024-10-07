@@ -8,7 +8,6 @@ const cache = @cImport({
     @cInclude("cache.h");
 });
 
-
 pub const MEM_SIZE = 30000;
 var memory = [_]u64{0} ** MEM_SIZE;
 
@@ -17,19 +16,20 @@ pub fn execute(instr: []const u32) !void {
     const exec_ptr = try std.posix.mmap(
         null,
         @intCast(instr.len * @sizeOf(u32)),
-         prot.EXEC | prot.WRITE,
+        prot.EXEC | prot.WRITE,
         .{ .TYPE = .PRIVATE, .ANONYMOUS = true },
         -1,
         0,
     );
     const exec_mem_region = std.mem.bytesAsSlice(u32, exec_ptr);
     @memcpy(exec_mem_region, instr);
-    cache.cache_clr(exec_ptr.ptr, @truncate( exec_ptr.len ));
-
+    cache.cache_clr(exec_ptr.ptr, @truncate(exec_ptr.len));
 
     runAndRet(exec_ptr.ptr, &memory);
-    asm volatile("ret_label:");
-    asm volatile("add sp, sp, 0x50");
+    asm volatile ("ret_label:");
+    asm volatile ("add sp, sp, 0x50");
+    handlers.writeBufferFlush();
+
     std.posix.munmap(exec_ptr);
 }
 
