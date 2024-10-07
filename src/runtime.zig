@@ -29,7 +29,6 @@ pub fn execute(instr: []const u32) !void {
     asm volatile ("ret_label:");
     asm volatile ("add sp, sp, 0x50");
     handlers.writeBufferFlush();
-    std.posix.munmap(exec_ptr);
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
