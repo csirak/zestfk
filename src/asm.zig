@@ -2,7 +2,7 @@ pub const DATA_PTR = 4;
 pub const ACCUM = 5;
 pub const READ_HANDLER = 6;
 pub const WRITE_HANDLER = 7;
-pub const RETRUN = 16;
+pub const LINK_REGISTER = 30;
 
 pub inline fn getDataPtr() u64 {
     var x: u64 = 0;
@@ -55,7 +55,7 @@ pub inline fn getReturn() u64 {
     return x;
 }
 pub inline fn writeReturn(x: u64) void {
-    asm volatile ("mov x16, %[x]"
+    asm volatile ("mov x29, %[x]"
         :
         : [x] "r" (x),
     );

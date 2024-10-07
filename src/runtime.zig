@@ -8,6 +8,7 @@ const cache = @cImport({
     @cInclude("cache.h");
 });
 
+
 pub const MEM_SIZE = 30000;
 var memory = [_]u64{0} ** MEM_SIZE;
 
@@ -27,20 +28,19 @@ pub fn execute(instr: []const u32) !void {
 
 
     runAndRet(exec_ptr.ptr, &memory);
+    asm volatile("ret_label:");
     asm volatile("add sp, sp, 0x50");
-    // std.posix.munmap(exec_ptr);
+    std.posix.munmap(exec_ptr);
 }
 
 fn runAndRet(location: *anyopaque, data: *anyopaque) void {
     handlers.execPrologue();
     azm.writeDataPtr(@intFromPtr(data));
     azm.writeAccum(0);
-    azm.writeReturn(@returnAddress());
-    asm volatile ("mov x12, %[x]"
+    asm volatile ("br %[x]"
         :
         : [x] "r" (location),
     );
-    asm volatile ("br x12");
 }
 
 test "clear reg" {
