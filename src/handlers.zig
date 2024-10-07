@@ -25,7 +25,6 @@ pub fn readHandler() callconv(.C) void {
     const accum = azm.getAccum();
     const write_to: [*]u8 = @ptrFromInt(data_ptr);
     writeBufferFlush();
-    std.debug.print("ENTER BYTE: ", .{});
     const stdin = std.io.getStdIn().reader();
     _ = stdin.read(write_to[0..1]) catch @panic("READ FAILED");
     epilogue(data_ptr, accum);
