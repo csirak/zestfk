@@ -48,7 +48,7 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
     var cur_command: usize = 0;
     while (cur_command < code.len) {
         switch (code[cur_command]) {
-            ' ', '\n', '\t', '\r' => {
+            ' ', '\n', '\t', '(', ')', '\r' => {
                 cur_command += 1;
                 continue;
             },
@@ -60,7 +60,7 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
 
         while (cur_command < code.len) : (cur_command += 1) {
             switch (code[cur_command]) {
-                ' ', '\n', '\t', '\r' => {
+                ' ', '\n', '\t', '(', ')', '\r' => {
                     cur_command += 1;
                     continue;
                 },
@@ -90,8 +90,8 @@ pub fn parse(code: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Inst
             .jumpBackIf => {
                 const jump = jumpstack.pop();
                 cur_value = @intCast(jump);
-            cur_value -= @as(u16, @truncate( instructions.items.len  ));
-                instructions.items[jump].value = @truncate(@abs(cur_value)) ;
+                cur_value -= @as(u16, @truncate(instructions.items.len));
+                instructions.items[jump].value = @truncate(@abs(cur_value));
             },
             else => {},
         }
