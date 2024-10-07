@@ -26,7 +26,7 @@ pub fn readHandler() callconv(.C) void {
     const write_to_ptr: *u64 = @ptrFromInt(data_ptr);
     writeBufferFlush();
     const stdin = std.io.getStdIn().reader();
-    var read_buf = [_]u8{0};
+    var read_buf = [_]u8{0} ** 8;
     std.debug.print("> ", .{});
     _ = stdin.readUntilDelimiterOrEof(read_buf[0..], '\n') catch |e| std.debug.print("error: {}", .{e});
     write_to_ptr.* = @intCast(read_buf[0]);
