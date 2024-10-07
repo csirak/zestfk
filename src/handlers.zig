@@ -23,7 +23,7 @@ inline fn epilogue(data_ptr: u64, accum: u64) void {
 pub fn readHandler() callconv(.C) void {
     const data_ptr = azm.getDataPtr();
     const accum = azm.getAccum();
-    const write_to_ptr: [*]u64 = @ptrFromInt(data_ptr);
+    const write_to_ptr: *u64 = @ptrFromInt(data_ptr);
     writeBufferFlush();
     const stdin = std.io.getStdIn().reader();
     var read_buf = [_]u8{0};
