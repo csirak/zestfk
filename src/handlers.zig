@@ -27,7 +27,7 @@ pub fn readHandler() callconv(.C) void {
     writeBufferFlush();
     const stdin = std.io.getStdIn().reader();
     var read_buf = [_]u8{0};
-    std.io.getStdOut().writer().print("> ", .{}) catch @panic("print FAILED");
+    std.debug.print("> ", .{});
     _ = stdin.read(read_buf[0..1]) catch @panic("READ FAILED");
     write_to_ptr.* = @intCast(read_buf[0]);
     epilogue(data_ptr, accum);
