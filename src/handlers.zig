@@ -28,7 +28,7 @@ pub fn readHandler() callconv(.C) void {
     const stdin = std.io.getStdIn().reader();
     var read_buf = [_]u8{0};
     std.debug.print("> ", .{});
-    _ = stdin.readUntilDelimiterOrEof(read_buf[0..], '\n') catch @panic("READ FAILED");
+    _ = stdin.readUntilDelimiterOrEof(read_buf[0..], '\n') catch |e| std.debug.print("error: {}", .{e});
     write_to_ptr.* = @intCast(read_buf[0]);
     epilogue(data_ptr, accum);
 }
