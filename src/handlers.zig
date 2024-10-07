@@ -29,6 +29,7 @@ pub fn readHandler() callconv(.C) void {
     var read_buf = [_]u8{0} ** 8;
     std.debug.print("> ", .{});
     _ = stdin.readUntilDelimiterOrEof(read_buf[0..], '\n') catch |e| std.debug.print("error: {}", .{e});
+    std.debug.print("READ: {s}", .{read_buf[0..1]});
     write_to_ptr.* = @intCast(read_buf[0]);
     epilogue(data_ptr, accum);
 }
